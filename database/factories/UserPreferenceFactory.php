@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Factories;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserPreference>
+ */
+class UserPreferenceFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'user_id'              => User::factory(),
+            'preferred_sources'    => [1, 2, 3],
+            'preferred_categories' => [1, 2],
+            'preferred_authors'    => [1],
+        ];
+    }
+}
