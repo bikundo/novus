@@ -132,6 +132,15 @@ $RECYCLE.BIN/
 # Laravel Boost files
 .github/copilot-instructions.md
 
+# AI Assistant Configuration Files
+.cursor/
+.junie/
+.mcp.json
+.vscode/mcp.json
+AGENTS.md
+CLAUDE.md
+boost.json
+
 # Progress tracking files
 PROJECT_PLAN.md
 PHASE_*.md
