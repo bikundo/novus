@@ -1,0 +1,110 @@
+name: Authors
+description: 'Endpoints for managing article authors'
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/authors
+    metadata:
+      groupName: Authors
+      groupDescription: 'Endpoints for managing article authors'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all authors'
+      description: 'Retrieve a paginated list of all authors in the system.'
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: 'Page number for pagination'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Number of items per page (max 100)'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      per_page: 20
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":[{"id":360,"name":"Miss Janiya Deckow DVM","created_at":"2025-10-03T15:20:51+00:00","updated_at":"2025-10-03T15:20:51+00:00"},{"id":361,"name":"Mara Heathcote","created_at":"2025-10-03T15:20:51+00:00","updated_at":"2025-10-03T15:20:51+00:00"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":20,"to":2,"total":2}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/authors/{id}'
+    metadata:
+      groupName: Authors
+      groupDescription: 'Endpoints for managing article authors'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get a single author'
+      description: 'Retrieve detailed information about a specific author.'
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the author.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":{"id":362,"name":"Dena Willms","created_at":"2025-10-03T15:20:51+00:00","updated_at":"2025-10-03T15:20:51+00:00"}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

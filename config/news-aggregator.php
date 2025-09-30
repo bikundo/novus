@@ -35,6 +35,11 @@ return [
     'per_page'       => env('NEWS_PER_PAGE', 20),
     'max_results'    => env('NEWS_MAX_RESULTS', 100),
 
+    'pagination' => [
+        'per_page'     => env('NEWS_PER_PAGE', 20),
+        'max_per_page' => env('NEWS_MAX_PER_PAGE', 100),
+    ],
+
     'cache' => [
         'ttl_articles'   => env('CACHE_TTL_ARTICLES', 900),
         'ttl_sources'    => env('CACHE_TTL_SOURCES', 86400),

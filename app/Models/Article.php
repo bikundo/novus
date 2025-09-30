@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ class Article extends Model
 {
     /** @use HasFactory<\Database\Factories\ArticleFactory> */
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'external_id',
@@ -53,6 +55,120 @@ class Article extends Model
     public function authors(): BelongsToMany
     {
         return $this->belongsToMany(Author::class);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id'             => (string) $this->id,
+            'title'          => $this->title,
+            'description'    => $this->description,
+            'content'        => $this->content,
+            'source_name'    => $this->source?->name ?? '',
+            'source_slug'    => $this->source?->slug ?? '',
+            'category_names' => $this->categories->pluck('name')->implode(', '),
+            'category_slugs' => $this->categories->pluck('slug')->toArray(),
+            'author_names'   => $this->authors->pluck('name')->implode(', '),
+            'published_at'   => $this->published_at?->timestamp ?? 0,
+        ];
+    }
+
+    /**
+     * Get the Typesense collection schema.
+     *
+     * @return array<string, mixed>
+     */
+    public function getCollectionSchema(): array
+    {
+        return [
+            'name'   => $this->searchableAs(),
+            'fields' => [
+                [
+                    'name' => 'id',
+                    'type' => 'string',
+                ],
+                [
+                    'name' => 'title',
+                    'type' => 'string',
+                ],
+                [
+                    'name' => 'description',
+                    'type' => 'string',
+                ],
+                [
+                    'name' => 'content',
+                    'type' => 'string',
+                ],
+                [
+                    'name'  => 'source_name',
+                    'type'  => 'string',
+                    'facet' => true,
+                ],
+                [
+                    'name'  => 'source_slug',
+                    'type'  => 'string',
+                    'facet' => true,
+                ],
+                [
+                    'name' => 'category_names',
+                    'type' => 'string',
+                ],
+                [
+                    'name'  => 'category_slugs',
+                    'type'  => 'string[]',
+                    'facet' => true,
+                ],
+                [
+                    'name' => 'author_names',
+                    'type' => 'string',
+                ],
+                [
+                    'name' => 'published_at',
+                    'type' => 'int64',
+                ],
+            ],
+            'default_sorting_field' => 'published_at',
+        ];
+    }
+
+    /**
+     * Get the value used to index the model.
+     */
+    public function getScoutKey(): mixed
+    {
+        return (string) $this->id;
+    }
+
+    /**
+     * Get the key name used to index the model.
+     */
+    public function getScoutKeyName(): mixed
+    {
+        return 'id';
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     */
+    public function searchableAs(): string
+    {
+        return 'articles';
+    }
+
+    /**
+     * Modify the query used to retrieve models when making all searchable.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function makeAllSearchableUsing($query)
+    {
+        return $query->with(['source', 'categories', 'authors']);
     }
 
     protected function casts(): array

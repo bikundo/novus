@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests\Api\V1;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class FilterArticlesRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, array<int, string>>
+     */
+    public function rules(): array
+    {
+        return [
+            'source'   => ['nullable', 'string', 'exists:sources,slug'],
+            'category' => ['nullable', 'string', 'exists:categories,slug'],
+            'author'   => ['nullable', 'string'],
+            'from'     => ['nullable', 'date', 'before_or_equal:to'],
+            'to'       => ['nullable', 'date', 'after_or_equal:from'],
+            'page'     => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'source.exists'        => 'The selected source does not exist.',
+            'category.exists'      => 'The selected category does not exist.',
+            'from.date'            => 'The from date must be a valid date.',
+            'from.before_or_equal' => 'The from date must be before or equal to the to date.',
+            'to.date'              => 'The to date must be a valid date.',
+            'to.after_or_equal'    => 'The to date must be after or equal to the from date.',
+            'page.integer'         => 'The page number must be an integer.',
+            'page.min'             => 'The page number must be at least 1.',
+            'per_page.integer'     => 'The per page value must be an integer.',
+            'per_page.min'         => 'The per page value must be at least 1.',
+            'per_page.max'         => 'The per page value must not exceed 100.',
+        ];
+    }
+}
