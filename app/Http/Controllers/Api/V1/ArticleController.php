@@ -55,7 +55,7 @@ class ArticleController extends Controller
     /**
      * Get a single article
      *
-     * Retrieve detailed information about a specific article including its source, categories, and authors.
+     * Retrieve detailed information about a specific article, including its source, categories, and authors.
      * Results are cached for 15 minutes.
      */
     #[ResponseFromApiResource(ArticleResource::class, Article::class)]

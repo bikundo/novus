@@ -225,13 +225,13 @@ return [
                             'type' => 'string',
                         ],
                         [
-                            'name' => 'source_name',
-                            'type' => 'string',
+                            'name'  => 'source_name',
+                            'type'  => 'string',
                             'facet' => true,
                         ],
                         [
-                            'name' => 'source_slug',
-                            'type' => 'string',
+                            'name'  => 'source_slug',
+                            'type'  => 'string',
                             'facet' => true,
                         ],
                         [
@@ -239,8 +239,8 @@ return [
                             'type' => 'string',
                         ],
                         [
-                            'name' => 'category_slugs',
-                            'type' => 'string[]',
+                            'name'  => 'category_slugs',
+                            'type'  => 'string[]',
                             'facet' => true,
                         ],
                         [

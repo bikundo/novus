@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace App\Services\Cache;
 
+use App\Models\Author;
+use App\Models\Source;
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ArticleCacheService
 {
-    private const TTL_ARTICLES = 900;
+    private const int TTL_ARTICLES = 900;
 
-    private const TTL_SOURCES = 86400;
+    private const int TTL_SOURCES = 86400;
 
-    private const TTL_CATEGORIES = 86400;
+    private const int TTL_CATEGORIES = 86400;
 
-    private const TTL_AUTHORS = 3600;
+    private const int TTL_AUTHORS = 3600;
 
-    private const TAG_ARTICLES = 'articles';
+    private const string TAG_ARTICLES = 'articles';
 
-    private const TAG_SOURCES = 'sources';
+    private const string TAG_SOURCES = 'sources';
 
-    private const TAG_CATEGORIES = 'categories';
+    private const string TAG_CATEGORIES = 'categories';
 
-    private const TAG_AUTHORS = 'authors';
+    private const string TAG_AUTHORS = 'authors';
 
     /**
      * Create a new class instance.
@@ -72,7 +75,7 @@ class ArticleCacheService
     {
         return Cache::tags([self::TAG_SOURCES])
             ->remember('sources:all', self::TTL_SOURCES, function () {
-                return \App\Models\Source::query()
+                return Source::query()
                     ->orderBy('name')
                     ->get();
             });
@@ -85,7 +88,7 @@ class ArticleCacheService
     {
         return Cache::tags([self::TAG_CATEGORIES])
             ->remember('categories:all', self::TTL_CATEGORIES, function () {
-                return \App\Models\Category::query()
+                return Category::query()
                     ->orderBy('name')
                     ->get();
             });
@@ -101,7 +104,7 @@ class ArticleCacheService
 
         return Cache::tags([self::TAG_AUTHORS])
             ->remember($cacheKey, self::TTL_AUTHORS, function () use ($perPage) {
-                return \App\Models\Author::query()
+                return Author::query()
                     ->orderBy('name')
                     ->paginate($perPage);
             });
