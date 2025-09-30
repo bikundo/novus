@@ -19,6 +19,7 @@
         "laravel/scout": "^10.19",
         "laravel/tinker": "^2.10.1",
         "meilisearch/meilisearch-php": "^1.16",
+        "predis/predis": "^3.2",
         "typesense/typesense-php": "^5.1"
     },
     "require-dev": {

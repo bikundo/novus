@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Http\Controllers\Controller;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
+use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\AuthorResource;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -15,10 +16,15 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 #[Group('Authors', 'Endpoints for managing article authors')]
 class AuthorController extends Controller
 {
+    public function __construct(
+        protected readonly ArticleCacheService $cacheService,
+    ) {}
+
     /**
      * List all authors
      *
      * Retrieve a paginated list of all authors in the system.
+     * Results are cached for 1 hour.
      */
     #[QueryParam('page', 'integer', 'Page number for pagination', required: false, example: 1)]
     #[QueryParam('per_page', 'integer', 'Number of items per page (max 100)', required: false, example: 20)]
@@ -27,9 +33,7 @@ class AuthorController extends Controller
     {
         $perPage = (int) request()->input('per_page', config('news-aggregator.pagination.per_page', 20));
 
-        $authors = Author::query()
-            ->orderBy('name')
-            ->paginate($perPage);
+        $authors = $this->cacheService->getAuthors($perPage);
 
         return AuthorResource::collection($authors);
     }

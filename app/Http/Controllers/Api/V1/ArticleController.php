@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Http\Controllers\Controller;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
+use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\ArticleResource;
 use App\Http\Requests\Api\V1\FilterArticlesRequest;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
@@ -16,10 +17,15 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 #[Group('Articles', 'Endpoints for managing and retrieving articles')]
 class ArticleController extends Controller
 {
+    public function __construct(
+        protected readonly ArticleCacheService $cacheService,
+    ) {}
+
     /**
      * List all articles
      *
      * Retrieve a paginated list of articles with optional filtering by source, category, author, and date range.
+     * Results are cached for 15 minutes for optimal performance.
      */
     #[QueryParam('source', 'string', 'Filter by source slug', required: false, example: 'the-guardian')]
     #[QueryParam('category', 'string', 'Filter by category slug', required: false, example: 'technology')]
@@ -33,37 +39,15 @@ class ArticleController extends Controller
     {
         $perPage = (int) $request->input('per_page', config('news-aggregator.pagination.per_page', 20));
 
-        $query = Article::query()
-            ->with(['source', 'categories', 'authors'])
-            ->latest('published_at');
+        $filters = [
+            'source'   => $request->input('source'),
+            'category' => $request->input('category'),
+            'author'   => $request->input('author'),
+            'from'     => $request->input('from'),
+            'to'       => $request->input('to'),
+        ];
 
-        if ($request->filled('source')) {
-            $query->whereHas('source', function ($q) use ($request) {
-                $q->where('slug', $request->input('source'));
-            });
-        }
-
-        if ($request->filled('category')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('slug', $request->input('category'));
-            });
-        }
-
-        if ($request->filled('author')) {
-            $query->whereHas('authors', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('author') . '%');
-            });
-        }
-
-        if ($request->filled('from')) {
-            $query->whereDate('published_at', '>=', $request->input('from'));
-        }
-
-        if ($request->filled('to')) {
-            $query->whereDate('published_at', '<=', $request->input('to'));
-        }
-
-        $articles = $query->paginate($perPage);
+        $articles = $this->cacheService->getArticles($filters, $perPage);
 
         return ArticleResource::collection($articles);
     }
@@ -72,12 +56,13 @@ class ArticleController extends Controller
      * Get a single article
      *
      * Retrieve detailed information about a specific article including its source, categories, and authors.
+     * Results are cached for 15 minutes.
      */
     #[ResponseFromApiResource(ArticleResource::class, Article::class)]
     public function show(Article $article): ArticleResource
     {
-        $article->load(['source', 'categories', 'authors']);
+        $cachedArticle = $this->cacheService->getArticle($article->id);
 
-        return new ArticleResource($article);
+        return new ArticleResource($cachedArticle ?? $article->load(['source', 'categories', 'authors']));
     }
 }

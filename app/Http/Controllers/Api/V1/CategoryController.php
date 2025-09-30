@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Knuckles\Scribe\Attributes\Group;
+use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\CategoryResource;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -14,17 +15,20 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 #[Group('Categories', 'Endpoints for managing article categories')]
 class CategoryController extends Controller
 {
+    public function __construct(
+        protected readonly ArticleCacheService $cacheService,
+    ) {}
+
     /**
      * List all categories
      *
      * Retrieve a list of all available article categories in the system.
+     * Results are cached for 24 hours.
      */
     #[ResponseFromApiResource(CategoryResource::class, Category::class, collection: true)]
     public function index(): AnonymousResourceCollection
     {
-        $categories = Category::query()
-            ->orderBy('name')
-            ->get();
+        $categories = $this->cacheService->getCategories();
 
         return CategoryResource::collection($categories);
     }
