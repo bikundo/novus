@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\Article;
 use App\Http\Controllers\Controller;
 use Knuckles\Scribe\Attributes\Group;
+use App\Services\SearchAnalyticsService;
 use Knuckles\Scribe\Attributes\QueryParam;
 use App\Http\Resources\Api\V1\ArticleResource;
 use App\Http\Requests\Api\V1\SearchArticlesRequest;
@@ -16,6 +17,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 #[Group('Search', 'Full-text search for articles')]
 class SearchController extends Controller
 {
+    public function __construct(
+        protected readonly SearchAnalyticsService $analyticsService,
+    ) {}
+
     /**
      * Search articles
      *
@@ -30,6 +35,8 @@ class SearchController extends Controller
     #[ResponseFromApiResource(ArticleResource::class, Article::class, collection: true, paginate: 20)]
     public function search(SearchArticlesRequest $request): AnonymousResourceCollection
     {
+        $startTime = microtime(true);
+
         $searchQuery = $request->input('q');
         $perPage = (int) $request->input('per_page', config('news-aggregator.pagination.per_page', 20));
 
@@ -85,6 +92,21 @@ class SearchController extends Controller
         $articles = $searchBuilder
             ->query(fn ($query) => $query->with(['source', 'categories', 'authors']))
             ->paginate($perPage);
+
+        $responseTime = (int) ((microtime(true) - $startTime) * 1000);
+
+        $this->analyticsService->trackSearch(
+            query: $searchQuery,
+            resultsCount: $articles->total(),
+            userId: auth()->id(),
+            sourceFilter: $request->input('source'),
+            categoryFilter: $request->input('category'),
+            fromDate: $request->input('from'),
+            toDate: $request->input('to'),
+            responseTimeMs: $responseTime,
+            ipAddress: $request->ip(),
+            userAgent: $request->userAgent()
+        );
 
         return ArticleResource::collection($articles);
     }

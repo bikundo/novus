@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\SourceController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
+use App\Http\Controllers\Api\V1\PersonalizedFeedController;
 
 Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function () {
     Route::get('articles', [ArticleController::class, 'index'])->name('articles.index');
@@ -26,6 +27,7 @@ Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function
     Route::get('authors/{author}', [AuthorController::class, 'show'])->name('authors.show');
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('feed', [PersonalizedFeedController::class, 'index'])->name('feed');
         Route::get('preferences', [UserPreferenceController::class, 'show'])->name('preferences.show');
         Route::post('preferences', [UserPreferenceController::class, 'store'])->name('preferences.store');
     });

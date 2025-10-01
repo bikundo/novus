@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Database\Factories\UserPreferenceFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserPreference extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserPreferenceFactory> */
+    /** @use HasFactory<UserPreferenceFactory> */
     use HasFactory;
 
     protected $fillable = [

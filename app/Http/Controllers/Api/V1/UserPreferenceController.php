@@ -22,7 +22,7 @@ class UserPreferenceController extends Controller
     /**
      * Get user preferences
      *
-     * Retrieve the authenticated user's news preferences including preferred sources, categories, and authors.
+     * Retrieve the authenticated user's news preferences, including preferred sources, categories, and authors.
      */
     #[ResponseFromApiResource(UserPreferenceResource::class, UserPreference::class)]
     public function show(): UserPreferenceResource|JsonResponse
