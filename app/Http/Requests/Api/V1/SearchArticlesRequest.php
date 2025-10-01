@@ -27,6 +27,8 @@ class SearchArticlesRequest extends FormRequest
             'q'         => ['nullable', 'string', 'max:255'],
             'source'    => ['nullable', 'string', 'exists:sources,slug'],
             'category'  => ['nullable', 'string', 'exists:categories,slug'],
+            'from'      => ['nullable', 'date', 'before_or_equal:to'],
+            'to'        => ['nullable', 'date', 'after_or_equal:from'],
             'page'      => ['nullable', 'integer', 'min:1'],
             'per_page'  => ['nullable', 'integer', 'min:1', 'max:100'],
         ];
@@ -40,15 +42,19 @@ class SearchArticlesRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'q.string'         => 'The search query must be a string.',
-            'q.max'            => 'The search query must not exceed 255 characters.',
-            'source.exists'    => 'The selected source does not exist.',
-            'category.exists'  => 'The selected category does not exist.',
-            'page.integer'     => 'The page number must be an integer.',
-            'page.min'         => 'The page number must be at least 1.',
-            'per_page.integer' => 'The per page value must be an integer.',
-            'per_page.min'     => 'The per page value must be at least 1.',
-            'per_page.max'     => 'The per page value must not exceed 100.',
+            'q.string'             => 'The search query must be a string.',
+            'q.max'                => 'The search query must not exceed 255 characters.',
+            'source.exists'        => 'The selected source does not exist.',
+            'category.exists'      => 'The selected category does not exist.',
+            'from.date'            => 'The from date must be a valid date.',
+            'from.before_or_equal' => 'The from date must be before or equal to the to date.',
+            'to.date'              => 'The to date must be a valid date.',
+            'to.after_or_equal'    => 'The to date must be after or equal to the from date.',
+            'page.integer'         => 'The page number must be an integer.',
+            'page.min'             => 'The page number must be at least 1.',
+            'per_page.integer'     => 'The per page value must be an integer.',
+            'per_page.min'         => 'The per page value must be at least 1.',
+            'per_page.max'         => 'The per page value must not exceed 100.',
         ];
     }
 }

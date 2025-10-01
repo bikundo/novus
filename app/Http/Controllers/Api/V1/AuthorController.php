@@ -12,6 +12,7 @@ use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\AuthorResource;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Cache;
 
 #[Group('Authors', 'Endpoints for managing article authors')]
 class AuthorController extends Controller
@@ -32,8 +33,23 @@ class AuthorController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $perPage = (int) request()->input('per_page', config('news-aggregator.pagination.per_page', 20));
+        $hasArticles = request()->boolean('has_articles', false);
+        $page = request()->input('page', 1);
 
-        $authors = $this->cacheService->getAuthors($perPage);
+        $cacheKey = "authors:page:{$page}:per_page:{$perPage}:has_articles:{$hasArticles}";
+
+        $authors = Cache::tags(['authors'])
+            ->remember($cacheKey, 3600, function () use ($perPage, $hasArticles) {
+                $query = Author::query()
+                    ->withCount('articles')
+                    ->orderBy('name');
+
+                if ($hasArticles) {
+                    $query->has('articles');
+                }
+
+                return $query->paginate($perPage);
+            });
 
         return AuthorResource::collection($authors);
     }
@@ -46,6 +62,19 @@ class AuthorController extends Controller
     #[ResponseFromApiResource(AuthorResource::class, Author::class)]
     public function show(Author $author): AuthorResource
     {
+        $cacheKey = "author:{$author->id}:details";
+
+        $author = Cache::tags(['authors'])
+            ->remember($cacheKey, 3600, function () use ($author) {
+                $author->loadCount('articles');
+
+                $author->load(['articles' => function ($query) {
+                    $query->latest('published_at')->limit(10);
+                }]);
+
+                return $author;
+            });
+
         return new AuthorResource($author);
     }
 }

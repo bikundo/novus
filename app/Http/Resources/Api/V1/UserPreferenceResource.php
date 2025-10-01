@@ -18,11 +18,9 @@ class UserPreferenceResource extends JsonResource
     {
         return [
             'id'                   => $this->id,
-            'preferred_sources'    => SourceResource::collection($this->whenLoaded('preferredSources')),
-            'preferred_categories' => CategoryResource::collection($this->whenLoaded('preferredCategories')),
-            'preferred_authors'    => AuthorResource::collection($this->whenLoaded('preferredAuthors')),
-            'created_at'           => $this->created_at?->toIso8601String(),
-            'updated_at'           => $this->updated_at?->toIso8601String(),
+            'preferred_sources'    => $this->preferred_sources ?? [],
+            'preferred_categories' => $this->preferred_categories ?? [],
+            'preferred_authors'    => $this->preferred_authors ?? [],
         ];
     }
 }

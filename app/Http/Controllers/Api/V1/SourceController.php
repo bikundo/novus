@@ -11,6 +11,7 @@ use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\SourceResource;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Cache;
 
 #[Group('Sources', 'Endpoints for managing news sources')]
 class SourceController extends Controller
@@ -28,7 +29,18 @@ class SourceController extends Controller
     #[ResponseFromApiResource(SourceResource::class, Source::class, collection: true)]
     public function index(): AnonymousResourceCollection
     {
-        $sources = $this->cacheService->getSources();
+        $perPage = (int) request()->input('per_page', config('news-aggregator.pagination.per_page', 20));
+        $page = request()->input('page', 1);
+
+        $cacheKey = "sources:page:{$page}:per_page:{$perPage}";
+
+        $sources = Cache::tags(['sources'])
+            ->remember($cacheKey, 86400, function () use ($perPage) {
+                return Source::query()
+                    ->withCount('articles')
+                    ->orderBy('name')
+                    ->paginate($perPage);
+            });
 
         return SourceResource::collection($sources);
     }
@@ -41,6 +53,19 @@ class SourceController extends Controller
     #[ResponseFromApiResource(SourceResource::class, Source::class)]
     public function show(Source $source): SourceResource
     {
+        $cacheKey = "source:{$source->id}:details";
+
+        $source = Cache::tags(['sources'])
+            ->remember($cacheKey, 86400, function () use ($source) {
+                $source->loadCount('articles');
+
+                $source->load(['articles' => function ($query) {
+                    $query->latest('published_at')->limit(10);
+                }]);
+
+                return $source;
+            });
+
         return new SourceResource($source);
     }
 }

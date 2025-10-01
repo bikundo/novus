@@ -34,10 +34,19 @@ class SearchController extends Controller
         $perPage = (int) $request->input('per_page', config('news-aggregator.pagination.per_page', 20));
 
         if (empty($searchQuery)) {
-            $articles = Article::query()
+            $query = Article::query()
                 ->with(['source', 'categories', 'authors'])
-                ->latest('published_at')
-                ->paginate($perPage);
+                ->latest('published_at');
+
+            if ($request->filled('from')) {
+                $query->where('published_at', '>=', $request->input('from'));
+            }
+
+            if ($request->filled('to')) {
+                $query->where('published_at', '<=', $request->input('to'));
+            }
+
+            $articles = $query->paginate($perPage);
 
             return ArticleResource::collection($articles);
         }
@@ -57,6 +66,16 @@ class SearchController extends Controller
 
         if ($request->filled('category')) {
             $filterBy[] = 'category_slugs:=' . $request->input('category');
+        }
+
+        if ($request->filled('from')) {
+            $fromTimestamp = strtotime($request->input('from'));
+            $filterBy[] = 'published_at:>=' . $fromTimestamp;
+        }
+
+        if ($request->filled('to')) {
+            $toTimestamp = strtotime($request->input('to') . ' 23:59:59');
+            $filterBy[] = 'published_at:<=' . $toTimestamp;
         }
 
         if (!empty($filterBy)) {

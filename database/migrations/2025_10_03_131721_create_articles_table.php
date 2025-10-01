@@ -28,7 +28,10 @@ return new class() extends Migration
             $table->index('external_id');
             $table->index('source_id');
             $table->index('published_at');
-            $table->fullText(['title', 'content']);
+
+            if (config('database.default') !== 'sqlite') {
+                $table->fullText(['title', 'content']);
+            }
         });
     }
 

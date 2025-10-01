@@ -34,12 +34,16 @@ class UserPreferenceController extends Controller
         }
 
         $preference = UserPreference::query()
-            ->with(['preferredSources', 'preferredCategories', 'preferredAuthors'])
             ->where('user_id', $user->id)
             ->first();
 
         if (!$preference) {
-            return response()->json(['message' => 'No preferences found'], Response::HTTP_NOT_FOUND);
+            return new UserPreferenceResource((object) [
+                'id'                   => null,
+                'preferred_sources'    => [],
+                'preferred_categories' => [],
+                'preferred_authors'    => [],
+            ]);
         }
 
         return new UserPreferenceResource($preference);
@@ -62,23 +66,14 @@ class UserPreferenceController extends Controller
             return response()->json(['message' => 'Unauthenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $preference = UserPreference::query()->firstOrCreate(
-            ['user_id' => $user->id]
+        $preference = UserPreference::query()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'preferred_sources'    => $request->input('preferred_sources', []),
+                'preferred_categories' => $request->input('preferred_categories', []),
+                'preferred_authors'    => $request->input('preferred_authors', []),
+            ]
         );
-
-        if ($request->has('preferred_sources')) {
-            $preference->preferredSources()->sync($request->input('preferred_sources', []));
-        }
-
-        if ($request->has('preferred_categories')) {
-            $preference->preferredCategories()->sync($request->input('preferred_categories', []));
-        }
-
-        if ($request->has('preferred_authors')) {
-            $preference->preferredAuthors()->sync($request->input('preferred_authors', []));
-        }
-
-        $preference->load(['preferredSources', 'preferredCategories', 'preferredAuthors']);
 
         return new UserPreferenceResource($preference);
     }

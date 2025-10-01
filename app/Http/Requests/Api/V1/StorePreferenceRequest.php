@@ -24,12 +24,12 @@ class StorePreferenceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'preferred_sources'      => ['nullable', 'array'],
-            'preferred_sources.*'    => ['integer', 'exists:sources,id'],
-            'preferred_categories'   => ['nullable', 'array'],
-            'preferred_categories.*' => ['integer', 'exists:categories,id'],
-            'preferred_authors'      => ['nullable', 'array'],
-            'preferred_authors.*'    => ['integer', 'exists:authors,id'],
+            'preferred_sources'      => ['nullable', 'array', 'max:50'],
+            'preferred_sources.*'    => ['string'],
+            'preferred_categories'   => ['nullable', 'array', 'max:50'],
+            'preferred_categories.*' => ['string'],
+            'preferred_authors'      => ['nullable', 'array', 'max:50'],
+            'preferred_authors.*'    => ['string'],
         ];
     }
 
@@ -42,14 +42,14 @@ class StorePreferenceRequest extends FormRequest
     {
         return [
             'preferred_sources.array'        => 'The preferred sources must be an array.',
-            'preferred_sources.*.integer'    => 'Each preferred source must be an integer.',
-            'preferred_sources.*.exists'     => 'One or more selected sources do not exist.',
+            'preferred_sources.max'          => 'You cannot select more than 50 preferred sources.',
+            'preferred_sources.*.string'     => 'Each preferred source must be a string.',
             'preferred_categories.array'     => 'The preferred categories must be an array.',
-            'preferred_categories.*.integer' => 'Each preferred category must be an integer.',
-            'preferred_categories.*.exists'  => 'One or more selected categories do not exist.',
+            'preferred_categories.max'       => 'You cannot select more than 50 preferred categories.',
+            'preferred_categories.*.string'  => 'Each preferred category must be a string.',
             'preferred_authors.array'        => 'The preferred authors must be an array.',
-            'preferred_authors.*.integer'    => 'Each preferred author must be an integer.',
-            'preferred_authors.*.exists'     => 'One or more selected authors do not exist.',
+            'preferred_authors.max'          => 'You cannot select more than 50 preferred authors.',
+            'preferred_authors.*.string'     => 'Each preferred author must be a string.',
         ];
     }
 }

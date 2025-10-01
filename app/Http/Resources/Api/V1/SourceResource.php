@@ -17,13 +17,15 @@ class SourceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'slug'        => $this->slug,
-            'url'         => $this->url,
-            'description' => $this->description,
-            'created_at'  => $this->created_at?->toIso8601String(),
-            'updated_at'  => $this->updated_at?->toIso8601String(),
+            'id'             => $this->id,
+            'name'           => $this->name,
+            'slug'           => $this->slug,
+            'url'            => $this->url,
+            'description'    => $this->description,
+            'created_at'     => $this->created_at?->toIso8601String(),
+            'updated_at'     => $this->updated_at?->toIso8601String(),
+            'articles_count' => $this->whenCounted('articles'),
+            'articles'       => ArticleResource::collection($this->whenLoaded('articles')),
         ];
     }
 }
