@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
 
-Route::prefix('v1')->name('api.v1.')->group(function () {
+Route::prefix('v1')->name('api.v1.')->middleware('throttle:api')->group(function () {
     Route::get('articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::get('articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
