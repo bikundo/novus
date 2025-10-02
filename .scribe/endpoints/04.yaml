@@ -11,7 +11,9 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'List all authors'
-      description: 'Retrieve a paginated list of all authors in the system.'
+      description: |-
+        Retrieve a paginated list of all authors in the system.
+        Results are cached for 1 hour.
       authenticated: false
       deprecated: false
       custom: []
@@ -50,7 +52,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"data":[{"id":360,"name":"Miss Janiya Deckow DVM","created_at":"2025-10-03T15:20:51+00:00","updated_at":"2025-10-03T15:20:51+00:00"},{"id":361,"name":"Mara Heathcote","created_at":"2025-10-03T15:20:51+00:00","updated_at":"2025-10-03T15:20:51+00:00"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":20,"to":2,"total":2}}'
+        content: '{"data":[{"id":465,"name":"Miss Janiya Deckow DVM","created_at":"2025-10-03T17:56:52+00:00","updated_at":"2025-10-03T17:56:52+00:00"},{"id":466,"name":"Mara Heathcote","created_at":"2025-10-03T17:56:52+00:00","updated_at":"2025-10-03T17:56:52+00:00"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":20,"to":2,"total":2}}'
         headers: []
         description: ''
         custom: []
@@ -98,7 +100,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"data":{"id":362,"name":"Dena Willms","created_at":"2025-10-03T15:20:51+00:00","updated_at":"2025-10-03T15:20:51+00:00"}}'
+        content: '{"data":{"id":467,"name":"Dena Willms","created_at":"2025-10-03T17:56:52+00:00","updated_at":"2025-10-03T17:56:52+00:00"}}'
         headers: []
         description: ''
         custom: []

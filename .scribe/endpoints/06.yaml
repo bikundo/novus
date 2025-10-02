@@ -1,0 +1,128 @@
+name: 'User Preferences'
+description: 'Endpoints for managing user preferences (requires authentication)'
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/preferences
+    metadata:
+      groupName: 'User Preferences'
+      groupDescription: 'Endpoints for managing user preferences (requires authentication)'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get user preferences'
+      description: "Retrieve the authenticated user's news preferences, including preferred sources, categories, and authors."
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":{"id":9,"preferred_sources":[1,2,3],"preferred_categories":[1,2],"preferred_authors":[1]}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/preferences
+    metadata:
+      groupName: 'User Preferences'
+      groupDescription: 'Endpoints for managing user preferences (requires authentication)'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create or update user preferences'
+      description: "Store or update the authenticated user's news preferences. This will sync the selected sources, categories, and authors."
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      preferred_sources:
+        name: preferred_sources
+        description: 'Array of source IDs'
+        required: false
+        example:
+          - 1
+          - 2
+          - 3
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      preferred_categories:
+        name: preferred_categories
+        description: 'Array of category IDs'
+        required: false
+        example:
+          - 1
+          - 2
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      preferred_authors:
+        name: preferred_authors
+        description: 'Array of author IDs'
+        required: false
+        example:
+          - 1
+          - 2
+          - 3
+          - 4
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      preferred_sources:
+        - 1
+        - 2
+        - 3
+      preferred_categories:
+        - 1
+        - 2
+      preferred_authors:
+        - 1
+        - 2
+        - 3
+        - 4
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: '{"data":{"id":10,"preferred_sources":[1,2,3],"preferred_categories":[1,2],"preferred_authors":[1]}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
