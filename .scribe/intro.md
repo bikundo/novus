@@ -3,7 +3,7 @@
 A powerful news aggregator API that fetches, stores, and serves articles from multiple news sources including NewsAPI, The Guardian, and The New York Times. Features include full-text search, personalized content feeds, and comprehensive analytics.
 
 <aside>
-    <strong>Base URL</strong>: <code>https://novus.test</code>
+    <strong>Base URL</strong>: <code>http://localhost:8080</code>
 </aside>
 
     This documentation aims to provide all the information you need to work with our API.

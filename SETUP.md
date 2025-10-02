@@ -20,7 +20,7 @@ For first-time setup, simply run:
 This automated script will:
 1. Create your `.env` file from `.env.example`
 2. Start all Docker containers (MySQL, Redis, Typesense)
-3. Generate application key
+3. Generate an application key
 4. Run database migrations
 5. Seed the database with initial data
 6. Set up Typesense search indexes
@@ -76,8 +76,8 @@ Get your API keys from:
 Once setup is complete:
 
 - **Application**: http://localhost
-- **API Documentation**: http://localhost/docs
-- **Horizon Dashboard**: http://localhost/horizon (job queue monitoring)
+- **API Documentation**: http://localhost:8080/docs
+- **Horizon Dashboard**: http://localhost:8080/horizon (job queue monitoring)
 - **Typesense Admin**: http://localhost:8108
 
 ## Fetch Your First Articles
@@ -129,7 +129,7 @@ The application uses Laravel Horizon for queue management:
 # Start Horizon (processes jobs)
 ./vendor/bin/sail artisan horizon
 
-# Or access the dashboard at http://localhost/horizon
+# Or access the dashboard at http://localhost:8080/horizon
 ```
 
 ## Testing
@@ -216,7 +216,7 @@ tests/
 
 ## Available API Endpoints
 
-See full documentation at http://localhost/docs
+See full documentation at http://localhost:8080/docs
 
 **Public Endpoints:**
 - `GET /api/v1/articles` - List articles (with filters)
@@ -234,7 +234,7 @@ See full documentation at http://localhost/docs
 ## Support
 
 For issues or questions, check:
-- API Documentation: http://localhost/docs
+- API Documentation: http://localhost:8080/docs
 - Laravel Documentation: https://laravel.com/docs
 - Project README: README.md
 
@@ -242,8 +242,8 @@ For issues or questions, check:
 
 1. Explore the API documentation at `/docs`
 2. Try fetching articles: `./vendor/bin/sail artisan news:fetch`
-3. Test the search: http://localhost/api/v1/search?q=technology
-4. Check Horizon dashboard: http://localhost/horizon
+3. Test the search: http://localhost:8080/api/v1/search?q=technology
+4. Check Horizon dashboard: http://localhost:8080/horizon
 5. Run the test suite: `./vendor/bin/sail test`
 
 Happy coding! 🚀

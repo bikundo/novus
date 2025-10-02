@@ -30,7 +30,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"data":{"id":9,"preferred_sources":[1,2,3],"preferred_categories":[1,2],"preferred_authors":[1]}}'
+        content: '{"data":{"id":7,"preferred_sources":[1,2,3],"preferred_categories":[1,2],"preferred_authors":[1]}}'
         headers: []
         description: ''
         custom: []
@@ -118,7 +118,7 @@ endpoints:
     responses:
       -
         status: 201
-        content: '{"data":{"id":10,"preferred_sources":[1,2,3],"preferred_categories":[1,2],"preferred_authors":[1]}}'
+        content: '{"data":{"id":8,"preferred_sources":[1,2,3],"preferred_categories":[1,2],"preferred_authors":[1]}}'
         headers: []
         description: ''
         custom: []
