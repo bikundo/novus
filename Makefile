@@ -1,14 +1,14 @@
 .PHONY: help setup up down restart shell artisan test pint fresh logs fetch horizon build dev clean cache-clear install status
 
 help: ## Show this help message
-	@echo 'News Aggregator - Available Commands'
+	@echo 'Novus News Aggregator - Available Commands'
 	@echo ''
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ''
 
 setup: ## Complete initial setup (run once)
 	@echo "=========================================="
-	@echo "News Aggregator - Initial Setup"
+	@echo "Novus News Aggregator - Initial Setup"
 	@echo "=========================================="
 	@echo ""
 	@if ! docker info > /dev/null 2>&1; then \

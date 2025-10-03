@@ -62,7 +62,10 @@ class SourceSeeder extends Seeder
         ];
 
         foreach ($sources as $source) {
-            Source::create($source);
+            Source::firstOrCreate(
+                ['slug' => $source['slug']],
+                $source
+            );
         }
     }
 }

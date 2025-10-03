@@ -8,10 +8,10 @@ A powerful Laravel-based news aggregator that fetches, stores, and serves articl
 - **Full-Text Search** - Lightning-fast search powered by Typesense
 - **Personalized Feeds** - Intelligent content ranking based on user preferences
 - **Search Analytics** - Comprehensive tracking and insights on search behavior
-- **RESTful API** - Well-documented endpoints with filtering and pagination
+- **RESTful API** - Well-documented endpoints with filtering and pagination (generated with Scribe)
 - **Queue System** - Background job processing with Laravel Horizon
 - **Redis Caching** - Optimized performance with intelligent caching strategies
-- **Comprehensive Tests** - Full test coverage
+- **Comprehensive Tests** - Full test coverage with Pest PHP
 
 ## Quick Start
 
@@ -202,6 +202,7 @@ make cache-clear
 - **Queue:** Laravel Horizon
 - **Testing:** Pest PHP
 - **Code Quality:** Laravel Pint
+- **API Documentation:** Scribe
 
 ## Project Structure
 
@@ -221,21 +222,3 @@ make cache-clear
 └── routes/
     └── api.php                    # API Routes
 ```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Run tests (`make test`)
-4. Format code (`make pint`)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## License
-
-This project is open-sourced software licensed under the MIT license.
-
-## Support
-
-For issues, questions, or contributions, please open an issue on GitHub.
