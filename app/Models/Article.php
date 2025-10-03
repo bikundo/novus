@@ -17,6 +17,46 @@ class Article extends Model
 
     use Searchable;
 
+    /**
+     * Get the columns that should be searched.
+     *
+     * @return array<int, string>
+     */
+    public function toSearchableArray(): array
+    {
+        if (config('scout.driver') === 'typesense') {
+            return [
+                'id'             => (string) $this->id,
+                'title'          => $this->title,
+                'description'    => $this->description,
+                'content'        => $this->content,
+                'source_name'    => $this->source?->name ?? '',
+                'source_slug'    => $this->source?->slug ?? '',
+                'category_names' => $this->categories->pluck('name')->implode(', '),
+                'category_slugs' => $this->categories->pluck('slug')->toArray(),
+                'author_names'   => $this->authors->pluck('name')->implode(', '),
+                'published_at'   => $this->published_at?->timestamp ?? 0,
+            ];
+        }
+
+        return [
+            'id'          => $this->id,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'content'     => $this->content,
+        ];
+    }
+
+    /**
+     * Get the name of the column used to search the model.
+     *
+     * @return array<int, string>
+     */
+    public function searchableColumns(): array
+    {
+        return ['id', 'title', 'description', 'content'];
+    }
+
     protected $fillable = [
         'external_id',
         'source_id',
@@ -56,27 +96,6 @@ class Article extends Model
     public function authors(): BelongsToMany
     {
         return $this->belongsToMany(Author::class);
-    }
-
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array<string, mixed>
-     */
-    public function toSearchableArray(): array
-    {
-        return [
-            'id'             => (string) $this->id,
-            'title'          => $this->title,
-            'description'    => $this->description,
-            'content'        => $this->content,
-            'source_name'    => $this->source?->name ?? '',
-            'source_slug'    => $this->source?->slug ?? '',
-            'category_names' => $this->categories->pluck('name')->implode(', '),
-            'category_slugs' => $this->categories->pluck('slug')->toArray(),
-            'author_names'   => $this->authors->pluck('name')->implode(', '),
-            'published_at'   => $this->published_at?->timestamp ?? 0,
-        ];
     }
 
     /**

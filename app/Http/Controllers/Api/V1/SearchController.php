@@ -90,7 +90,19 @@ class SearchController extends Controller
         }
 
         $articles = $searchBuilder
-            ->query(fn ($query) => $query->with(['source', 'categories', 'authors']))
+            ->query(function ($query) use ($request) {
+                $query->with(['source', 'categories', 'authors']);
+
+                if ($request->filled('from')) {
+                    $query->where('published_at', '>=', $request->input('from'));
+                }
+
+                if ($request->filled('to')) {
+                    $query->where('published_at', '<=', $request->input('to') . ' 23:59:59');
+                }
+
+                return $query;
+            })
             ->paginate($perPage);
 
         $responseTime = (int) ((microtime(true) - $startTime) * 1000);
