@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Source;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Knuckles\Scribe\Attributes\Group;
 use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\SourceResource;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Cache;
 
 #[Group('Sources', 'Endpoints for managing news sources')]
 class SourceController extends Controller

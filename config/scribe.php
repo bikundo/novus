@@ -15,8 +15,6 @@ return [
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
     'description' => 'A powerful news aggregator API that fetches, stores, and serves articles from multiple news sources including NewsAPI, The Guardian, and The New York Times. Features include full-text search, personalized content feeds, and comprehensive analytics.',
 
-
-
     // The base URL displayed in the docs.
     // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
     'base_url' => config('app.url'),

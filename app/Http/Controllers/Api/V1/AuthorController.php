@@ -6,13 +6,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Author;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
 use App\Services\Cache\ArticleCacheService;
 use App\Http\Resources\Api\V1\AuthorResource;
 use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Cache;
 
 #[Group('Authors', 'Endpoints for managing article authors')]
 class AuthorController extends Controller

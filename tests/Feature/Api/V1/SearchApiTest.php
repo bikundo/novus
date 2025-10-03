@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Source;
 use App\Models\Article;
-use App\Models\Category;
 
 use function Pest\Laravel\getJson;
 
