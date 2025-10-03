@@ -43,6 +43,9 @@ setup: ## Complete initial setup (run once)
 	done
 	@echo "Redis ready"
 	@echo ""
+	@echo "Installing Composer dependencies..."
+	@./vendor/bin/sail composer install
+	@echo ""
 	@echo "Creating storage directories in container..."
 	@./vendor/bin/sail exec laravel.test bash -c "mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/framework/testing storage/logs storage/app/public && chmod -R 777 storage bootstrap/cache"
 	@echo ""
